@@ -60,3 +60,24 @@ export const map = <T, I>(
       yield func(value, index)
     }
   })
+
+export const flatten = <T>(input: AsyncIterable<AsyncIterable<T>|undefined>|undefined): AsyncIterable<T> =>
+  iterable(async function *(): AsyncIterator<T> {
+    // tslint:disable-next-line:no-if-statement
+    if (input === undefined) {
+      return
+    }
+    /* tslint:disable-next-line:no-loop-statement */
+    for await (const v of input) {
+      // tslint:disable-next-line:no-if-statement
+      if (v !== undefined) {
+        yield *v
+      }
+    }
+  })
+
+export const flatMap = <T, I>(
+  input: AsyncIterable<I>|undefined,
+  func: (v: I, i: number) => AsyncIterable<T>,
+): AsyncIterable<T> =>
+    flatten(map(input, func))

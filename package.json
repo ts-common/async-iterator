@@ -1,10 +1,10 @@
 {
   "name": "@ts-common/async-iterator",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Asynchonous Iterator (ES2018 and ESNEXT)",
   "main": "dist/index.js",
   "scripts": {
-    "test": "tsc && mocha ./dist/test.js",
+    "test": "tsc && nyc mocha ./dist/test.js",
     "prepack": "npm install && tsc"
   },
   "repository": {
@@ -19,6 +19,12 @@
     "dist/index.d.ts.map",
     "src/index.ts"
   ],
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text"
+    ]
+  },
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/ts-common/async-iterator/issues"
