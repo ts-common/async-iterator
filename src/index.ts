@@ -8,11 +8,12 @@ export const iterable = <T>(createIterator: () => AsyncIterator<T>): AsyncIterab
   ({ [Symbol.asyncIterator]: createIterator })
 
 export const fromSync = <T>(input: sync.Iterable<T>): AsyncIterable<T> =>
-  iterable(async function *(): AsyncIterator<T> {
-    for (const v of input) {
-      yield v
-    }
-  })
+  iterable(async function *(): AsyncIterator<T> { yield *input })
+
+export const fromSequence = <T>(...a: T[]): AsyncIterable<T> => fromSync(a)
+
+export const fromPromise = <T>(p: Promise<sync.Iterable<T>>): AsyncIterable<T> =>
+  iterable(async function *(): AsyncIterator<T> { yield *await p })
 
 export const fold = async <T, A>(
   input: AsyncIterable<T>|undefined,

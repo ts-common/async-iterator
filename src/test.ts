@@ -42,3 +42,23 @@ describe("flatMap", () => {
         assert.deepEqual([2, 3, 3, 5, 4, 7], result2)
     })
 })
+
+describe("fromSequence", () => {
+    it("array", async () => {
+        const r = _.fromSequence(1, 2, 3)
+        const result = await _.toArray(r)
+        assert.deepEqual([1, 2, 3], result)
+        const result2 = await _.toArray(_.map(r, i => i + 1))
+        assert.deepEqual([2, 3, 4], result2)
+    })
+})
+
+describe("fromPromise", () => {
+    it("array", async () => {
+        const r = _.fromPromise(Promise.resolve([1, 2, 3]))
+        const result = await _.toArray(r)
+        assert.deepEqual([1, 2, 3], result)
+        const result2 = await _.toArray(_.map(r, i => i + 1))
+        assert.deepEqual([2, 3, 4], result2)
+    })
+})
