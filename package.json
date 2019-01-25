@@ -1,7 +1,7 @@
 {
   "name": "@ts-common/async-iterator",
   "version": "0.0.2",
-  "description": "Asynchonous Iterator (ES2018 and ESNEXT)",
+  "description": "Asynchronous Iterator (ES2018 and ESNEXT)",
   "main": "dist/index.js",
   "scripts": {
     "test": "tsc && nyc mocha ./dist/test.js",
