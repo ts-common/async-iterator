@@ -99,6 +99,6 @@ export const flatten = <T>(input: AsyncIterable<AsyncIterable<T>|undefined>|unde
 
 export const flatMap = <T, I>(
   input: AsyncIterable<I>|undefined,
-  func: (v: I, i: number) => AsyncIterable<T>,
+  func: (v: I, i: number) => AsyncIterable<T>|undefined,
 ): AsyncIterableEx<T> =>
     flatten(map(input, func))
