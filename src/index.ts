@@ -10,6 +10,7 @@ export type AsyncIterableEx<T> = {
   readonly entries: () => AsyncIterableEx<Entry<T>>
   readonly map: <R>(func: (v: T, i: number) => R) => AsyncIterableEx<R>
   readonly flatMap: <R>(func: (v: T, i: number) => AsyncIterable<R>|undefined) => AsyncIterableEx<R>
+  readonly filter: (func: (v: T, i: number) => boolean) => AsyncIterableEx<T>
 } & AsyncIterable<T>
 
 class AsyncIterableImpl<T> implements AsyncIterableEx<T> {
@@ -22,6 +23,7 @@ class AsyncIterableImpl<T> implements AsyncIterableEx<T> {
   public entries() { return entries(this) }
   public map<R>(func: (v: T, i: number) => R) { return map(this, func) }
   public flatMap<R>(func: (v: T, i: number) => AsyncIterable<R>|undefined) { return flatMap(this, func) }
+  public filter(func: (v: T, i: number) => boolean) { return filter(this, func) }
 }
 
 export const iterable = <T>(createIterator: () => AsyncIterator<T>): AsyncIterableEx<T> =>
@@ -104,3 +106,6 @@ export const flatMap = <T, I>(
     flatten(map(input, func))
 
 export const empty = <T>(): AsyncIterableEx<T> => iterable(async function *(): AsyncIterator<T> {})
+
+export const filter = <T>(input: AsyncIterable<T>|undefined, func: (v: T, i: number) => boolean): AsyncIterableEx<T> =>
+  flatMap(input, (v, i) => func(v, i) ? fromSequence(v) : empty())

@@ -82,3 +82,10 @@ describe("empty", () => {
         assert.deepEqual([], x)
     })
 })
+
+describe("filter", () => {
+    it("some", async () => {
+        const x = await _.fromSequence(1, 2, 3).filter(v => v % 2 !== 0).toArray()
+        assert.deepEqual([1, 3], x)
+    })
+})
