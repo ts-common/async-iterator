@@ -75,3 +75,10 @@ describe("fromPromise", () => {
         assert.deepEqual([2, 3, 4], result2)
     })
 })
+
+describe("empty", () => {
+    it("nothing", async () => {
+        const x = _.empty<number>().toArray()
+        assert.deepEqual([], x)
+    })
+})
