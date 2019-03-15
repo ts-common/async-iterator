@@ -9,7 +9,7 @@ export type AsyncIterableEx<T> = {
   readonly toArray: () => Promise<ReadonlyArray<T>>
   readonly entries: () => AsyncIterableEx<Entry<T>>
   readonly map: <R>(func: (v: T, i: number) => R) => AsyncIterableEx<R>
-  readonly flatMap: <R>(func: (v: T, i: number) => AsyncIterable<R>) => AsyncIterableEx<R>
+  readonly flatMap: <R>(func: (v: T, i: number) => AsyncIterable<R>|undefined) => AsyncIterableEx<R>
 } & AsyncIterable<T>
 
 class AsyncIterableImpl<T> implements AsyncIterableEx<T> {
@@ -21,7 +21,7 @@ class AsyncIterableImpl<T> implements AsyncIterableEx<T> {
   public toArray() { return toArray(this) }
   public entries() { return entries(this) }
   public map<R>(func: (v: T, i: number) => R) { return map(this, func) }
-  public flatMap<R>(func: (v: T, i: number) => AsyncIterable<R>) { return flatMap(this, func) }
+  public flatMap<R>(func: (v: T, i: number) => AsyncIterable<R>|undefined) { return flatMap(this, func) }
 }
 
 export const iterable = <T>(createIterator: () => AsyncIterator<T>): AsyncIterableEx<T> =>
@@ -99,6 +99,6 @@ export const flatten = <T>(input: AsyncIterable<AsyncIterable<T>|undefined>|unde
 
 export const flatMap = <T, I>(
   input: AsyncIterable<I>|undefined,
-  func: (v: I, i: number) => AsyncIterable<T>,
+  func: (v: I, i: number) => AsyncIterable<T>|undefined,
 ): AsyncIterableEx<T> =>
     flatten(map(input, func))
