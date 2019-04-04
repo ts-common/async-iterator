@@ -2,11 +2,9 @@ import * as sync from "@ts-common/iterator"
 
 export type Entry<T> = sync.Entry<T>
 
-export const entry = sync.entry
-
 export type AsyncIterableEx<T> = {
   readonly fold: <A>(func: (a: A, b: T, i: number) => A, init: A) => Promise<A>
-  readonly toArray: () => Promise<ReadonlyArray<T>>
+  readonly toArray: () => Promise<readonly T[]>
   readonly entries: () => AsyncIterableEx<Entry<T>>
   readonly map: <R>(func: (v: T, i: number) => R) => AsyncIterableEx<R>
   readonly flatMap: <R>(func: (v: T, i: number) => AsyncIterable<R>|undefined) => AsyncIterableEx<R>
@@ -32,7 +30,7 @@ export const iterable = <T>(createIterator: () => AsyncIterator<T>): AsyncIterab
 export const fromSync = <T>(input: sync.Iterable<T>): AsyncIterableEx<T> =>
   iterable(async function *(): AsyncIterator<T> { yield *input })
 
-export const fromSequence = <T>(...a: T[]): AsyncIterableEx<T> => fromSync(a)
+export const fromSequence = <T>(...a: readonly T[]): AsyncIterableEx<T> => fromSync(a)
 
 export const fromPromise = <T>(p: Promise<sync.Iterable<T>>): AsyncIterableEx<T> =>
   iterable(async function *(): AsyncIterator<T> { yield *await p })
@@ -51,7 +49,7 @@ export const fold = async <T, A>(
   return result
 }
 
-export const toArray = <T>(input: AsyncIterable<T>|undefined): Promise<ReadonlyArray<T>> =>
+export const toArray = <T>(input: AsyncIterable<T>|undefined): Promise<readonly T[]> =>
   fold(
     input,
     (a, i) => { a.push(i); return a },
@@ -67,7 +65,7 @@ export const entries = <T>(input: AsyncIterable<T>|undefined): AsyncIterableEx<E
     let index = 0
     /* tslint:disable-next-line:no-loop-statement */
     for await (const value of input) {
-      yield entry(index, value)
+      yield [index, value]
       /* tslint:disable-next-line:no-expression-statement */
       ++index
     }
@@ -90,7 +88,7 @@ export const flatten = <T>(input: AsyncIterable<AsyncIterable<T>|undefined>|unde
     if (input === undefined) {
       return
     }
-    /* tslint:disable-next-line:no-loop-statement */
+    // tslint:disable-next-line:no-loop-statement
     for await (const v of input) {
       // tslint:disable-next-line:no-if-statement
       if (v !== undefined) {
