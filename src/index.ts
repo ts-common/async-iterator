@@ -11,21 +11,20 @@ export type AsyncIterableEx<T> = {
   readonly filter: (func: (v: T, i: number) => boolean) => AsyncIterableEx<T>
 } & AsyncIterable<T>
 
-class AsyncIterableImpl<T> implements AsyncIterableEx<T> {
-  public readonly [Symbol.asyncIterator]: () => AsyncIterator<T>
-  constructor(createIterator: () => AsyncIterator<T>) {
-    this[Symbol.asyncIterator] = createIterator
+export const iterable = <T>(createIterator: () => AsyncIterator<T>): AsyncIterableEx<T> => {
+  const property = <P extends readonly unknown[], R>(f: (self: AsyncIterable<T>, ...p: P) => R) =>
+    (...p: P) => f(result, ...p)
+  const result: AsyncIterableEx<T> = {
+    [Symbol.asyncIterator]: createIterator,
+    fold: property(fold),
+    toArray: property(toArray),
+    entries: property(entries),
+    map: property(map),
+    flatMap: property(flatMap),
+    filter: property(filter),
   }
-  public fold<A>(func: (a: A, b: T, i: number) => A, init: A) { return fold(this, func, init) }
-  public toArray() { return toArray(this) }
-  public entries() { return entries(this) }
-  public map<R>(func: (v: T, i: number) => R) { return map(this, func) }
-  public flatMap<R>(func: (v: T, i: number) => AsyncIterable<R>|undefined) { return flatMap(this, func) }
-  public filter(func: (v: T, i: number) => boolean) { return filter(this, func) }
+  return result
 }
-
-export const iterable = <T>(createIterator: () => AsyncIterator<T>): AsyncIterableEx<T> =>
-  new AsyncIterableImpl(createIterator)
 
 export const fromSync = <T>(input: sync.Iterable<T>): AsyncIterableEx<T> =>
   iterable(async function *(): AsyncIterator<T> { yield *input })

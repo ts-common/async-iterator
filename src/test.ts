@@ -1,4 +1,3 @@
-import "mocha"
 import * as _ from "./index"
 import assert from "assert"
 
