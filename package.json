@@ -1,10 +1,10 @@
 {
   "name": "@ts-common/async-iterator",
-  "version": "0.2.0",
-  "description": "Asynchronous Iterator (ES2018 and ESNEXT)",
+  "version": "0.2.1",
+  "description": "Asynchronous Iterator (ES2019)",
   "main": "dist/index.js",
   "scripts": {
-    "test": "tsc && nyc mocha ./dist/test.js",
+    "test": "tsc && jest",
     "prepack": "npm install && tsc"
   },
   "repository": {
@@ -19,11 +19,36 @@
     "dist/index.d.ts.map",
     "src/index.ts"
   ],
-  "nyc": {
-    "reporter": [
-      "lcov",
-      "text"
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/dist/*test.js"
+    ],
+    "reporters": [
+      "jest-junit",
+      "default"
+    ],
+    "collectCoverage": true,
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    },
+    "coveragePathIgnorePatterns": [
+      "/dist/test/"
+    ],
+    "coverageReporters": [
+      "cobertura",
+      "text",
+      "html"
     ]
+  },
+  "jest-junit": {
+    "outputDirectory": ".",
+    "outputName": "test-results.xml"
   },
   "license": "Apache-2.0",
   "bugs": {
@@ -31,14 +56,14 @@
   },
   "homepage": "https://github.com/ts-common/async-iterator#readme",
   "devDependencies": {
-    "@types/mocha": "^5.2.6",
+    "@types/jest": "^24.0.13",
     "@types/node": "^10.12.18",
-    "mocha": "^6.0.2",
-    "nyc": "^13.3.0",
-    "typescript": "^3.4.1"
+    "jest": "^24.8.0",
+    "jest-junit": "^6.4.0",
+    "typescript": "^3.4.5"
   },
   "dependencies": {
-    "@ts-common/iterator": "^0.3.0",
+    "@ts-common/iterator": "^0.3.2",
     "tslib": "^1.9.3"
   }
 }
