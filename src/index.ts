@@ -51,7 +51,7 @@ export const fold = async <T, A>(
 export const toArray = <T>(input: AsyncIterable<T>|undefined): Promise<readonly T[]> =>
   fold(
     input,
-    async (a, i) => { a.push(i); return a },
+    (a, i) => { a.push(i); return a },
     new Array<T>()
   )
 
