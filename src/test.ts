@@ -22,6 +22,13 @@ describe("map", () => {
         const result2 = await r.map(i => i + 1).toArray()
         assert.deepEqual([2, 5, 10], result2)
     })
+    it("promise", async () => {
+        const r = _.fromSync([1, 2, 3]).map(async (x) => await x * x)
+        const result = await _.toArray(r)
+        assert.deepEqual([1, 4, 9], result)
+        const result2 = await r.map(i => i + 1).toArray()
+        assert.deepEqual([2, 5, 10], result2)
+    })
 })
 
 describe("flatten", () => {
@@ -85,6 +92,10 @@ describe("empty", () => {
 describe("filter", () => {
     it("some", async () => {
         const x = await _.fromSequence(1, 2, 3).filter(v => v % 2 !== 0).toArray()
+        assert.deepEqual([1, 3], x)
+    })
+    it("promise", async () => {
+        const x = await _.fromSequence(1, 2, 3).filter(v => Promise.resolve(v % 2 !== 0)).toArray()
         assert.deepEqual([1, 3], x)
     })
 })
