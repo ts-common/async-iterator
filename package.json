@@ -1,6 +1,6 @@
 {
   "name": "@ts-common/async-iterator",
-  "version": "0.2.3",
+  "version": "1.1.0",
   "description": "Asynchronous Iterator (ES2019)",
   "main": "dist/index.js",
   "scripts": {
@@ -50,7 +50,7 @@
     "outputDirectory": ".",
     "outputName": "test-results.xml"
   },
-  "license": "Apache-2.0",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ts-common/async-iterator/issues"
   },
@@ -64,7 +64,7 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "@ts-common/iterator": "^0.3.6",
+    "@ts-common/iterator": "^1.1.0",
     "tslib": "^1.10.0"
   }
 }
