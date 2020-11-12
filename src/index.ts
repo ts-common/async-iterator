@@ -26,12 +26,12 @@ export const iterable = <T>(createIterator: () => AsyncIterator<T>): AsyncIterab
   return result
 }
 
-export const fromSync = <T>(input: sync.Iterable<T>): AsyncIterableEx<T> =>
+export const fromSync = <T>(input: Iterable<T>): AsyncIterableEx<T> =>
   iterable(async function *(): AsyncIterator<T> { yield *input })
 
 export const fromSequence = <T>(...a: readonly T[]): AsyncIterableEx<T> => fromSync(a)
 
-export const fromPromise = <T>(p: Promise<sync.Iterable<T>>): AsyncIterableEx<T> =>
+export const fromPromise = <T>(p: Promise<Iterable<T>>): AsyncIterableEx<T> =>
   iterable(async function *(): AsyncIterator<T> { yield *await p })
 
 export const fold = async <T, A>(
